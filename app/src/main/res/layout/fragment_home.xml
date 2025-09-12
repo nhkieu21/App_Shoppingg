@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Filter -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <RadioGroup
+            android:id="@+id/radioGroupFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/rbPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phone" />
+
+            <RadioButton
+                android:id="@+id/rbLaptop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Laptop" />
+
+            <RadioButton
+                android:id="@+id/rbClock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clock" />
+
+            <RadioButton
+                android:id="@+id/rbPC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PC" />
+
+            <RadioButton
+                android:id="@+id/rbElectronic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Electronic" />
+        </RadioGroup>
+    </HorizontalScrollView>
+
+    <!-- Danh sách sản phẩm -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewProducts"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="?attr/actionBarSize"/>
+</LinearLayout>
