@@ -1,30 +1,30 @@
-# Ứng dụng mua hàng điện tử Shoppingg
+# Online Shopping Application - Shoppingg
 
-## Giới thiệu về Shoppingg
+## Introduction to Shoppingg
 
-Shopping là một ứng dụng cung cấp cho người dùng một kho sản phẩm về các
-mặt hàng điện tử như điện thoại, laptop, đồng hồ, PC và phụ kiện. 
+Shoppingg is an application that provides users with a wide range of 
+electronic products such as mobile phones, laptops, watches, PCs, and accessories.
 
-## Chức năng của Shoppingg
+## Features of Shoppingg
 
--   Hiển thị tất cả sản phẩm
--   Hiển thị thông tin sản phẩm (Mô tả sản phẩm, giá)
--   Giỏ hàng và thanh toán
--   Phân loại sản phẩm
+-   Display all products
+-   Show product information (description, price)
+-   Shopping cart and checkout
+-   Product categorization
 
-## Giao diện Shoppingg
+## Shoppingg Interface
 
-### Danh sách sản phẩm
-![Danh sách sản phẩm](image/Product_list.png)
+### Product List
+![Product List](image/Product_list.png)
 
-### Danh mục sản phẩm
-![Danh mục sản phẩm](image/Product_catalog.png)
+### Product Categories
+![Product Categories](image/Product_catalog.png)
 
-### Thông tin sản phẩm
-![Thông tin sản phẩm](image/Product.png)
+### Product Information
+![Product Information](image/Product.png)
 
-### Giỏ hàng
-![Giỏ hàng](image/Cart.png)
+### Shopping Cart
+![Shopping Cart](image/Cart.png)
 
-### Thanh toán
-![Thanh toán](image/Payment.png)
+### Payment
+![Payment](image/Payment.png)
