@@ -26,5 +26,5 @@ electronic products such as mobile phones, laptops, watches, PCs, and accessorie
 ### Shopping Cart
 ![Shopping Cart](image/Cart.png)
 
-### Payment
-![Payment](image/Payment.png)
+### Checkout
+![Checkout](image/Payment.png)
