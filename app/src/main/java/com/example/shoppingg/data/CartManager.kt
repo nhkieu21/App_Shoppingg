@@ -29,4 +29,15 @@ object CartManager {
 
     fun getTotalPrice(): Int =
         _cartItems.sumOf { it.product.price * it.quantity }
+
+    fun removeItem(product: Product) {
+        val iterator = _cartItems.iterator()
+        while (iterator.hasNext()) {
+            val item = iterator.next()
+            if (item.product == product) {
+                iterator.remove()
+                break
+            }
+        }
+    }
 }

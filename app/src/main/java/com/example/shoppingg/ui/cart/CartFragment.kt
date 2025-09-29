@@ -25,9 +25,15 @@ class CartFragment : Fragment() {
         _binding = FragmentCartBinding.inflate(inflater, container, false)
 
         // Setup RecyclerView
-        adapter = CartAdapter(CartManager.cartItems)
+        adapter = CartAdapter(
+            CartManager.cartItems.toMutableList()
+        ) {
+            // callback khi xóa hoặc thay đổi
+            updateCartSummary()
+        }
         binding.recyclerViewCart.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewCart.adapter = adapter
+
 
         // nút Checkout
         binding.buttonCheckout.setOnClickListener {
@@ -76,7 +82,7 @@ class CartFragment : Fragment() {
             .setPositiveButton("OK") { dialog, _ ->
                 // clear cart
                 CartManager.clear()
-                adapter.updateData(CartManager.cartItems)
+                adapter.updateData(CartManager.cartItems.toMutableList())
                 updateCartSummary()
                 dialog.dismiss()
             }
@@ -86,7 +92,7 @@ class CartFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        adapter.updateData(CartManager.cartItems)
+        adapter.updateData(CartManager.cartItems.toMutableList())
         updateCartSummary()
     }
 
@@ -95,6 +101,7 @@ class CartFragment : Fragment() {
         val total = CartManager.getTotalPrice()
         binding.tvCartSummary.text = "Items: $count | Total: ${formatCurrencyVN(total)}₫"
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
