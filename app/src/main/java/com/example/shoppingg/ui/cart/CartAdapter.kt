@@ -8,10 +8,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.shoppingg.R
+import com.example.shoppingg.data.CartManager
 import com.example.shoppingg.ui.models.CartItem
 
 
-class CartAdapter(private var items: List<CartItem>) :
+class CartAdapter(private var items:  MutableList<CartItem>,
+                  private val onCartChanged: () -> Unit ) :
     RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     inner class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -19,6 +21,7 @@ class CartAdapter(private var items: List<CartItem>) :
         val price: TextView = itemView.findViewById(R.id.product_price)
         val image: ImageView = itemView.findViewById(R.id.product_image)
         val qty: TextView = itemView.findViewById(R.id.product_quantity)
+        val btnDelete: ImageView = itemView.findViewById(R.id.btn_delete)
     }
 
 
@@ -40,12 +43,30 @@ class CartAdapter(private var items: List<CartItem>) :
             .error(R.drawable.ic_launcher_foreground)      // ảnh khi lỗi
             .into(holder.image)
 
+        // nút xóa
+        holder.btnDelete.setOnClickListener {
+            removeItem(holder.adapterPosition)
+
+        }
     }
 
     override fun getItemCount() = items.size
 
-    fun updateData(newItems: List<CartItem>) {
-        items = newItems
+    fun removeItem(position: Int) {
+        if (position in items.indices) {
+            val item = items[position]
+            // xóa trong CartManager
+            CartManager.removeItem(item.product)  // hàm này bạn phải viết trong CartManager
+            // xóa trong adapter
+            items.removeAt(position)
+            notifyItemRemoved(position)
+            // báo về Fragment cập nhật tổng tiền
+            onCartChanged()
+        }
+    }
+    fun updateData(newItems: MutableList<CartItem>) {
+        items.clear()
+        items.addAll(newItems)
         notifyDataSetChanged()
     }
 }

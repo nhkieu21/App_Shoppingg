@@ -5,23 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.shoppingg.MainActivity
 import com.example.shoppingg.R
 import com.example.shoppingg.databinding.FragmentHomeBinding
 import com.example.shoppingg.ui.adapter.ProductAdapter
 import com.example.shoppingg.ui.models.Product
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.IOException
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var allProducts: List<Product>
+    private val viewModel: HomeViewModel by viewModels()
     private lateinit var adapter: ProductAdapter
+    private var allProducts: List<Product> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,16 +30,31 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        // Load data từ JSON
-        allProducts = loadProductsFromJson()
-
-        // Setup RecyclerView
+        // RecyclerView setup
         binding.recyclerViewProducts.layoutManager = LinearLayoutManager(requireContext())
-        adapter = ProductAdapter(allProducts) { product ->
+        adapter = ProductAdapter(emptyList()) { product ->
             val bundle = Bundle().apply { putSerializable("product", product) }
             findNavController().navigate(R.id.productDetailFragment, bundle)
         }
         binding.recyclerViewProducts.adapter = adapter
+
+        // Quan sát loading
+        viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+            if (loading) {
+                (activity as? MainActivity)?.showLoading()
+            } else {
+                (activity as? MainActivity)?.hideLoading()
+            }
+        }
+
+        // Quan sát dữ liệu
+        viewModel.products.observe(viewLifecycleOwner) { products ->
+            allProducts = products
+            adapter.updateData(products)
+        }
+
+        // Gọi load dữ liệu
+        viewModel.loadProducts(requireContext())
 
         // Filter theo category
         binding.radioGroupFilter.setOnCheckedChangeListener { _, checkedId ->
@@ -55,18 +70,6 @@ class HomeFragment : Fragment() {
         }
 
         return binding.root
-    }
-
-    private fun loadProductsFromJson(): List<Product> {
-        return try {
-            val inputStream = requireContext().assets.open("products.json")
-            val json = inputStream.bufferedReader().use { it.readText() }
-            val listType = object : TypeToken<List<Product>>() {}.type
-            Gson().fromJson(json, listType)
-        } catch (e: IOException) {
-            e.printStackTrace()
-            emptyList()
-        }
     }
 
     override fun onDestroyView() {

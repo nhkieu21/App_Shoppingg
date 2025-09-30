@@ -1,5 +1,6 @@
 package com.example.shoppingg.data
 
+import android.os.Looper
 import com.example.shoppingg.ui.models.CartItem
 import com.example.shoppingg.ui.models.Product
 
@@ -29,4 +30,15 @@ object CartManager {
 
     fun getTotalPrice(): Int =
         _cartItems.sumOf { it.product.price * it.quantity }
+
+    fun removeItem(product: Product) {
+        val iterator = _cartItems.iterator()
+        while (iterator.hasNext()) {
+            val item = iterator.next()
+            if (item.product == product) {
+                iterator.remove()
+                break
+            }
+        }
+    }
 }
