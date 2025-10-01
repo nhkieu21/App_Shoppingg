@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -38,7 +40,7 @@ class HomeFragment : Fragment() {
         }
         binding.recyclerViewProducts.adapter = adapter
 
-        // Quan sát loading
+        // Loading
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
             if (loading) {
                 (activity as? MainActivity)?.showLoading()
@@ -47,26 +49,32 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // Quan sát dữ liệu
         viewModel.products.observe(viewLifecycleOwner) { products ->
             allProducts = products
             adapter.updateData(products)
         }
 
-        // Gọi load dữ liệu
         viewModel.loadProducts(requireContext())
 
-        // Filter theo category
-        binding.radioGroupFilter.setOnCheckedChangeListener { _, checkedId ->
-            val filteredList = when (checkedId) {
-                R.id.rbPhone -> allProducts.filter { it.category == "Phone" }
-                R.id.rbLaptop -> allProducts.filter { it.category == "Laptop" }
-                R.id.rbClock -> allProducts.filter { it.category == "Clock" }
-                R.id.rbPC -> allProducts.filter { it.category == "PC" }
-                R.id.rbElectronic -> allProducts.filter { it.category == "Electronic" }
-                else -> allProducts
+        // Dropdown
+        val categories = listOf("All", "Phone", "Laptop", "Clock", "PC", "Electronic")
+        val spinnerAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerFilter.adapter = spinnerAdapter
+
+        binding.spinnerFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selected = categories[position]
+                val filteredList = if (selected == "All") {
+                    allProducts
+                } else {
+                    allProducts.filter { it.category == selected }
+                }
+                adapter.updateData(filteredList)
             }
-            adapter.updateData(filteredList)
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
         return binding.root
