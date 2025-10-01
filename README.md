@@ -2,7 +2,7 @@
 
 ## Introduction to Shoppingg
 
-Shoppingg is an application that provides users with a wide range of 
+**Shoppingg** is an application that provides users with a wide range of 
 electronic products such as mobile phones, laptops, watches, PCs, and accessories.
 
 ## Features of Shoppingg
