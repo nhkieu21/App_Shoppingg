@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -58,23 +59,33 @@ class HomeFragment : Fragment() {
 
         // Dropdown
         val categories = listOf("All", "Phone", "Laptop", "Clock", "PC", "Electronic")
-        val spinnerAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories)
+        val spinnerAdapter = object :
+            ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, categories) {
+
+            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getDropDownView(position, convertView, parent) as TextView
+                view.setTextColor(
+                    if (position == binding.spinnerFilter.selectedItemPosition)
+                        resources.getColor(R.color.purple_500, null)
+                    else
+                        resources.getColor(android.R.color.black, null)
+                )
+                return view
+            }
+        }
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerFilter.adapter = spinnerAdapter
 
+        // Category
         binding.spinnerFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selected = categories[position]
-                val filteredList = if (selected == "All") {
-                    allProducts
-                } else {
-                    allProducts.filter { it.category == selected }
-                }
-                adapter.updateData(filteredList)
+            override fun onItemSelected(p: AdapterView<*>, v: View?, pos: Int, id: Long) {
+                val selected = categories[pos]
+                adapter.updateData(
+                    if (selected == "All") allProducts else allProducts.filter { it.category == selected }
+                )
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {}
+            override fun onNothingSelected(p: AdapterView<*>) {}
         }
 
         return binding.root
