@@ -62,18 +62,58 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- Nút Add to Cart -->
-            <Button
-                android:id="@+id/btn_add_to_cart"
+            <!-- Add to Cart -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:backgroundTint="?attr/colorPrimaryVariant"
-                android:padding="10dp"
-                android:text="Add to Cart"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:textSize="16sp" />
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_minus"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:text="-"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_quantity"
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/black" />
+
+                    <Button
+                        android:id="@+id/btn_plus"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:text="+"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_add_to_cart"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="?attr/colorPrimaryVariant"
+                    android:text="Add to Cart"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
         </LinearLayout>
 

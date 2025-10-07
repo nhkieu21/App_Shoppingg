@@ -19,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar
 class ProductDetailFragment : Fragment() {
 
     private var product: Product? = null
+    private var quantity = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +37,9 @@ class ProductDetailFragment : Fragment() {
         val desc = view.findViewById<TextView>(R.id.product_description)
         val price = view.findViewById<TextView>(R.id.product_price)
         val btnAddToCart = view.findViewById<Button>(R.id.btn_add_to_cart)
+        val btnMinus = view.findViewById<Button>(R.id.btn_minus)
+        val btnPlus = view.findViewById<Button>(R.id.btn_plus)
+        val tvQuantity = view.findViewById<TextView>(R.id.tv_quantity)
 
         product?.let { p ->
             name.text = p.name
@@ -43,28 +47,42 @@ class ProductDetailFragment : Fragment() {
             price.text = p.priceFormatted
 
             Glide.with(this)
-                .load(p.image)  // p.image là URL
-                .placeholder(R.drawable.ic_launcher_foreground) // ảnh tạm thời khi tải
-                .error(R.drawable.ic_launcher_foreground)       // ảnh khi lỗi
+                .load(p.image)
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .error(R.drawable.ic_launcher_foreground)
                 .into(img)
         }
 
+        btnMinus.setOnClickListener {
+            if (quantity > 1) {
+                quantity--
+                tvQuantity.text = quantity.toString()
+            }
+        }
+
+        btnPlus.setOnClickListener {
+            quantity++
+            tvQuantity.text = quantity.toString()
+        }
+
+
+
         btnAddToCart.setOnClickListener {
             product?.let { p ->
-                // thêm vào giỏ hàng
-                CartManager.addItem(p)
+                repeat(quantity) {
+                    CartManager.addItem(p)
+                }
 
-                // hiển thị Snackbar với nút “Xem giỏ hàng”
-                Snackbar.make(view, "Added to Your Cart", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Added $quantity item(s) to your cart", Snackbar.LENGTH_LONG)
                     .setAction("View Cart") {
-                        // chuyển trang
                         findNavController().navigate(R.id.navigation_cart)
 
-                        // cập nhật highlight menu
-                        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
+                        val bottomNav =
+                            requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
                         bottomNav.selectedItemId = R.id.navigation_cart
                     }.show()
-
+                quantity = 1
+                tvQuantity.text = quantity.toString()
             }
         }
 
