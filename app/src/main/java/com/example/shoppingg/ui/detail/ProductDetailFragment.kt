@@ -72,8 +72,9 @@ class ProductDetailFragment : Fragment() {
                 repeat(quantity) {
                     CartManager.addItem(p)
                 }
+                val itemText = if (quantity == 1) "item" else "items"
 
-                Snackbar.make(view, "Added $quantity item(s) to your cart", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Added $quantity $itemText to your cart", Snackbar.LENGTH_LONG)
                     .setAction("View Cart") {
                         findNavController().navigate(R.id.navigation_cart)
 
