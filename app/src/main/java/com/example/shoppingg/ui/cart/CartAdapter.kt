@@ -1,10 +1,12 @@
 package com.example.shoppingg.ui.cart
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.shoppingg.R
@@ -38,16 +40,25 @@ class CartAdapter(private var items:  MutableList<CartItem>,
         holder.qty.text = "Quantity: ${item.quantity}"
 
         Glide.with(holder.itemView.context)
-            .load(item.product.image)  // item.product.image là URL hoặc drawable
-            .placeholder(R.drawable.ic_launcher_foreground) // ảnh tạm thời khi tải
-            .error(R.drawable.ic_launcher_foreground)      // ảnh khi lỗi
+            .load(item.product.image)
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .error(R.drawable.ic_launcher_foreground)
             .into(holder.image)
 
-        // nút xóa
         holder.btnDelete.setOnClickListener {
-            removeItem(holder.adapterPosition)
-
+            AlertDialog.Builder(holder.itemView.context)
+                .setTitle("Confirm delete")
+                .setMessage("Are you sure you want to delete this item?")
+                .setPositiveButton("Delete") { dialog, _ ->
+                    removeItem(holder.adapterPosition)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
         }
+
     }
 
     override fun getItemCount() = items.size
@@ -55,12 +66,12 @@ class CartAdapter(private var items:  MutableList<CartItem>,
     fun removeItem(position: Int) {
         if (position in items.indices) {
             val item = items[position]
-            // xóa trong CartManager
-            CartManager.removeItem(item.product)  // hàm này bạn phải viết trong CartManager
-            // xóa trong adapter
+
+            CartManager.removeItem(item.product)
+
             items.removeAt(position)
             notifyItemRemoved(position)
-            // báo về Fragment cập nhật tổng tiền
+
             onCartChanged()
         }
     }
