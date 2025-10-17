@@ -41,22 +41,6 @@ class HomeFragment : Fragment() {
         }
         binding.recyclerViewProducts.adapter = adapter
 
-        // Loading
-        viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
-            if (loading) {
-                (activity as? MainActivity)?.showLoading()
-            } else {
-                (activity as? MainActivity)?.hideLoading()
-            }
-        }
-
-        viewModel.products.observe(viewLifecycleOwner) { products ->
-            allProducts = products
-            adapter.updateData(products)
-        }
-
-        viewModel.loadProducts(requireContext())
-
         // Dropdown
         val categories = listOf("All", "Phone", "Laptop", "Clock", "PC", "Electronic")
         val spinnerAdapter = object :
@@ -76,13 +60,26 @@ class HomeFragment : Fragment() {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerFilter.adapter = spinnerAdapter
 
+        // Loading
+        viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+            if (loading) {
+                (activity as? MainActivity)?.showLoading()
+            } else {
+                (activity as? MainActivity)?.hideLoading()
+            }
+        }
+
+        viewModel.products.observe(viewLifecycleOwner) { products ->
+            allProducts = products
+            adapter.updateData(products)
+        }
+
         // Category
         binding.spinnerFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p: AdapterView<*>, v: View?, pos: Int, id: Long) {
                 val selected = categories[pos]
-                adapter.updateData(
-                    if (selected == "All") allProducts else allProducts.filter { it.category == selected }
-                )
+                adapter.updateData(emptyList())
+                viewModel.loadProducts(requireContext(), selected)
             }
 
             override fun onNothingSelected(p: AdapterView<*>) {}
