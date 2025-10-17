@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.shoppingg.R
 import com.example.shoppingg.data.CartManager
 import com.example.shoppingg.databinding.FragmentCartBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -28,19 +33,43 @@ class CartFragment : Fragment() {
         adapter = CartAdapter(
             CartManager.cartItems.toMutableList()
         ) {
-            // callback khi xóa hoặc thay đổi
+            // Callback
             updateCartSummary()
+            checkEmptyCart()
         }
         binding.recyclerViewCart.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewCart.adapter = adapter
 
 
-        // nút Checkout
+        // Checkout
         binding.buttonCheckout.setOnClickListener {
             showBillAndClearCart()
         }
 
+        //Go to Shop
+        binding.btnGoToShop.setOnClickListener {
+            findNavController().navigate(R.id.navigation_home)
+            val bottomNav =
+                requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
+            bottomNav.selectedItemId = R.id.navigation_home
+        }
+
+        updateCartSummary()
+        checkEmptyCart()
+
         return binding.root
+    }
+
+    private fun checkEmptyCart() {
+        if (CartManager.cartItems.isEmpty()) {
+            binding.emptyCartLayout.visibility = View.VISIBLE
+            binding.recyclerViewCart.visibility = View.GONE
+            binding.buttonCheckout.visibility = View.GONE
+        } else {
+            binding.emptyCartLayout.visibility = View.GONE
+            binding.recyclerViewCart.visibility = View.VISIBLE
+            binding.buttonCheckout.visibility = View.VISIBLE
+        }
     }
 
     fun formatCurrencyVN(amount: Int): String {
@@ -50,22 +79,10 @@ class CartFragment : Fragment() {
     }
 
     private fun showBillAndClearCart() {
-
-        if (CartManager.cartItems.isEmpty()) {
-            androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                .setTitle("Your Cart is Empty")
-                .setMessage("Add something to make me happy.")
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
-            return
-        }
-
         val count = CartManager.getItemCount()
         val total = CartManager.getTotalPrice()
 
-        // Tạo chuỗi bill
+        // Bill
         val billDetails = buildString {
             append("Your Order:\n\n")
             CartManager.cartItems.forEach {
@@ -75,7 +92,7 @@ class CartFragment : Fragment() {
             append("\nTotal price: ${formatCurrencyVN(total)}₫")
         }
 
-        // Hiển thị AlertDialog
+        // AlertDialog
         androidx.appcompat.app.AlertDialog.Builder(requireContext())
             .setTitle("Thank You For Your Order")
             .setMessage(billDetails)
@@ -84,6 +101,7 @@ class CartFragment : Fragment() {
                 CartManager.clear()
                 adapter.updateData(CartManager.cartItems.toMutableList())
                 updateCartSummary()
+                checkEmptyCart()
                 dialog.dismiss()
             }
             .show()
@@ -94,6 +112,7 @@ class CartFragment : Fragment() {
         super.onResume()
         adapter.updateData(CartManager.cartItems.toMutableList())
         updateCartSummary()
+        checkEmptyCart()
     }
 
     private fun updateCartSummary() {
