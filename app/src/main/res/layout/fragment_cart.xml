@@ -2,9 +2,46 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
 
-    <!-- Danh sách sản phẩm trong giỏ -->
+    <!-- Empty Cart -->
+    <LinearLayout
+        android:id="@+id/emptyCartLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/empty_cart"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:id="@+id/tvEmptyMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Cart is Empty"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/btnGoToShop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Return to Shop"
+            android:textAllCaps="false"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <!-- View Cart -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCart"
         android:layout_width="match_parent"
@@ -12,13 +49,12 @@
         android:layout_weight="1"
         android:clipToPadding="false" />
 
-    <!-- Tổng tiền -->
+    <!-- Cart summary -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp">
-<!--        android:gravity="space_between">-->
 
         <TextView
             android:id="@+id/tvCartSummary"
@@ -30,8 +66,7 @@
 
     </LinearLayout>
 
-
-    <!-- Nút checkout -->
+    <!-- Checkout -->
     <Button
         android:id="@+id/buttonCheckout"
         android:layout_width="match_parent"
