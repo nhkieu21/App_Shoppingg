@@ -17,7 +17,8 @@ import com.google.android.material.snackbar.Snackbar
 
 class ProductAdapter(
     private var products: List<Product>,
-    private val onClick: (Product) -> Unit
+    private val onClick: (Product) -> Unit,
+    private val isSuggestion: Boolean = false
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     inner class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -99,8 +100,8 @@ class ProductAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_product, parent, false)
+        val layoutId = if (isSuggestion) R.layout.item_suggestion else R.layout.item_product
+        val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
         return ProductViewHolder(view)
     }
 

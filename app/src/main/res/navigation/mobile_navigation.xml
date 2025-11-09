@@ -1,16 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_home">
 
+    <!-- Home tab -->
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.shoppingg.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home"/>
 
+    <!-- Cart tab -->
+    <fragment
+        android:id="@+id/navigation_cart"
+        android:name="com.example.shoppingg.ui.cart.CartFragment"
+        android:label="@string/title_cart"
+        tools:layout="@layout/fragment_cart"/>
+
+    <!-- Account tab (nested graph) -->
+    <navigation
+        android:id="@+id/navigation_account"
+        app:startDestination="@id/loginFragment">
+
+        <fragment
+            android:id="@+id/loginFragment"
+            android:name="com.example.shoppingg.ui.account.LoginFragment"
+            android:label="Account"
+            tools:layout="@layout/fragment_login">
+            <action
+                android:id="@+id/action_loginFragment_to_signUpFragment"
+                app:destination="@id/signUpFragment"/>
+        </fragment>
+
+        <fragment
+            android:id="@+id/signUpFragment"
+            android:name="com.example.shoppingg.ui.account.SignUpFragment"
+            android:label="Account"
+            tools:layout="@layout/fragment_register">
+            <action
+                android:id="@+id/action_signUpFragment_to_loginFragment"
+                app:destination="@id/loginFragment"/>
+        </fragment>
+    </navigation>
+
+    <!-- Product Detail -->
     <fragment
         android:id="@+id/productDetailFragment"
         android:name="com.example.shoppingg.ui.detail.ProductDetailFragment"
@@ -18,15 +52,13 @@
         tools:layout="@layout/fragment_product_detail">
         <argument
             android:name="product"
-            app:argType="com.example.shoppingg.ui.models.Product" />
+            app:argType="com.example.shoppingg.ui.models.Product"/>
     </fragment>
 
-
+    <!-- Category -->
     <fragment
-        android:id="@+id/navigation_cart"
-        android:name="com.example.shoppingg.ui.cart.CartFragment"
-        android:label="@string/title_cart"
-        tools:layout="@layout/fragment_cart" />
-
-
+        android:id="@+id/categoryFragment"
+        android:name="com.example.shoppingg.ui.category.CategoryFragment"
+        android:label="CategoryFragment"
+        tools:layout="@layout/fragment_category"/>
 </navigation>

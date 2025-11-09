@@ -25,6 +25,7 @@ class HomeViewModel : ViewModel() {
 
     fun loadProducts(context: Context, category: String) {
         _isLoading.value = true
+        _products.value = emptyList()
         viewModelScope.launch {
             delay(500)
             try {

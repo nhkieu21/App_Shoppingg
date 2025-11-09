@@ -1,21 +1,26 @@
 package com.example.shoppingg.ui.home
 
+import CarouselAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.example.shoppingg.MainActivity
 import com.example.shoppingg.R
 import com.example.shoppingg.databinding.FragmentHomeBinding
+import com.example.shoppingg.ui.adapter.Category
+import com.example.shoppingg.ui.adapter.CategoryAdapter
 import com.example.shoppingg.ui.adapter.ProductAdapter
 import com.example.shoppingg.ui.models.Product
+import android.os.Handler
+import android.os.Looper
+
 
 class HomeFragment : Fragment() {
 
@@ -25,6 +30,12 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var adapter: ProductAdapter
     private var allProducts: List<Product> = emptyList()
+    private lateinit var images: List<Int>
+    private lateinit var viewPager: ViewPager2
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var currentPage = 0
+    private var currentCategory = "All"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,63 +44,102 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        // RecyclerView setup
-        binding.recyclerViewProducts.layoutManager = LinearLayoutManager(requireContext())
-        adapter = ProductAdapter(emptyList()) { product ->
+        viewPager = binding.carouselViewPager
+
+        images = listOf(
+            R.drawable.carousel1,
+            R.drawable.carousel2,
+            R.drawable.carousel3
+        )
+
+        viewPager.adapter = CarouselAdapter(images)
+        viewPager.offscreenPageLimit = 1
+
+        autoSlideImages()
+
+        // Suggestion product list
+        binding.recyclerViewSuggestions.layoutManager =
+            GridLayoutManager(requireContext(), 2)
+        adapter = ProductAdapter(emptyList(), onClick = { product ->
             val bundle = Bundle().apply { putSerializable("product", product) }
             findNavController().navigate(R.id.productDetailFragment, bundle)
-        }
-        binding.recyclerViewProducts.adapter = adapter
+        }, isSuggestion = true)
+        binding.recyclerViewSuggestions.adapter = adapter
 
-        // Dropdown
-        val categories = listOf("All", "Phone", "Laptop", "Clock", "PC", "Electronic")
-        val spinnerAdapter = object :
-            ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, categories) {
+        val categories = listOf(
+            Category("All", R.drawable.ic_all),
+            Category("Phone", R.drawable.ic_phone),
+            Category("Laptop", R.drawable.ic_laptop),
+            Category("Clock", R.drawable.ic_clock),
+            Category("PC", R.drawable.ic_pc),
+            Category("Electronic", R.drawable.ic_electronic)
+        )
 
-            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = super.getDropDownView(position, convertView, parent) as TextView
-                view.setTextColor(
-                    if (position == binding.spinnerFilter.selectedItemPosition)
-                        resources.getColor(R.color.purple_500, null)
-                    else
-                        resources.getColor(android.R.color.black, null)
-                )
-                return view
-            }
+        val selectedCategory = arguments?.getString("selectedCategory") ?: "All"
+        currentCategory = selectedCategory
+
+
+        val categoryAdapter = CategoryAdapter(categories) { selectedCategory ->
+            currentCategory = selectedCategory.name
+            adapter.updateData(emptyList())
+            viewModel.loadProducts(requireContext(), selectedCategory.name)
         }
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerFilter.adapter = spinnerAdapter
+        categoryAdapter.selectAll()
+
+        // Categories
+        binding.recyclerViewCategories.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerViewCategories.adapter = categoryAdapter
 
         // Loading
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
             if (loading) {
-                (activity as? MainActivity)?.showLoading()
+                binding.progressBar.visibility = View.VISIBLE
+                binding.tvSeeAll.visibility = View.GONE
             } else {
-                (activity as? MainActivity)?.hideLoading()
+                binding.progressBar.visibility = View.GONE
+                binding.tvSeeAll.visibility = View.VISIBLE
             }
         }
 
+
+        // Observe
         viewModel.products.observe(viewLifecycleOwner) { products ->
             allProducts = products
-            adapter.updateData(products)
+            adapter.updateData(allProducts.take(4))
         }
 
-        // Category
-        binding.spinnerFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p: AdapterView<*>, v: View?, pos: Int, id: Long) {
-                val selected = categories[pos]
-                adapter.updateData(emptyList())
-                viewModel.loadProducts(requireContext(), selected)
+        // See all
+        binding.tvSeeAll.setOnClickListener {
+            val bundle = Bundle().apply {
+                putString("selectedCategory", currentCategory)
             }
-
-            override fun onNothingSelected(p: AdapterView<*>) {}
+            findNavController().navigate(R.id.categoryFragment, bundle)
         }
+
+        viewModel.loadProducts(requireContext(), currentCategory)
 
         return binding.root
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun autoSlideImages() {
+        val adapter = viewPager.adapter ?: return
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                val itemCount = adapter.itemCount
+                if (itemCount == 0) return
+
+                currentPage = (currentPage + 1) % itemCount
+                viewPager.setCurrentItem(currentPage, true)
+
+                handler.postDelayed(this, 3000)
+            }
+        }, 3000)
     }
 }
