@@ -1,27 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <!--     Dropdown-->
-    <Spinner
-        android:id="@+id/spinnerFilter"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:spinnerMode="dropdown"
-        android:background="@drawable/bg_spinner"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"/>
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
 
+        <!-- Carousel -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/carouselViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="8dp" />
 
-    <!-- List Products  -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewProducts"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingBottom="?attr/actionBarSize"/>
-</LinearLayout>
+        <!-- Category -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:id="@+id/tvShopByCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shop by Category"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Category list -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:overScrollMode="never"/>
+
+        <!-- List Products -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewSuggestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:layout_marginBottom="16dp"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="64dp"
+            android:visibility="gone"/>
+
+        <!-- See All-->
+        <TextView
+            android:id="@+id/tvSeeAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="See All"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/purple_500"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_button"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
