@@ -1,74 +1,60 @@
 package com.example.shoppingg
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.example.shoppingg.data.CartManager
+import androidx.navigation.ui.setupWithNavController
+import androidx.viewpager2.widget.ViewPager2
+import com.example.shoppingg.data.SessionManager
 import com.example.shoppingg.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var progressBar: ProgressBar
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (savedInstanceState == null) {
+            SessionManager(this).clearSession()
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
-        // Các fragment gốc (không hiển thị nút back)
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_home,
-                R.id.navigation_cart
+                R.id.navigation_cart,
+                R.id.navigation_account,
+                R.id.signUpFragment
             )
         )
 
         setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
 
-        navView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_home -> {
-                    // Pop về fragment gốc của Home
-                    navController.popBackStack(R.id.navigation_home, false)
-                    // Điều hướng tới Home nếu chưa ở Home
-                    if (navController.currentDestination?.id != R.id.navigation_home) {
-                        navController.navigate(R.id.navigation_home)
-                    }
-                    true
-                }
-                R.id.navigation_cart -> {
-                    // Pop về fragment gốc của Cart
-                    navController.popBackStack(R.id.navigation_cart, false)
-                    if (navController.currentDestination?.id != R.id.navigation_cart) {
-                        navController.navigate(R.id.navigation_cart)
-                    }
-                    true
-                }
-                else -> false
-            }
-        }
-
-//        navView.setupWithNavController(navController)
     }
 
-    fun showLoading() {
-        findViewById<ProgressBar>(R.id.progressBar)?.visibility = View.VISIBLE
-    }
 
-    fun hideLoading() {
-        findViewById<ProgressBar>(R.id.progressBar)?.visibility = View.GONE
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -1,5 +1,6 @@
 package com.example.shoppingg.ui.detail
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,13 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.shoppingg.R
 import com.example.shoppingg.data.CartManager
+import com.example.shoppingg.data.SessionManager
 import com.example.shoppingg.ui.models.Product
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -68,6 +72,28 @@ class ProductDetailFragment : Fragment() {
 
 
         btnAddToCart.setOnClickListener {
+            val sessionManager = SessionManager(view.context)
+            val isLoggedIn = sessionManager.isLoggedIn()
+
+            if (!isLoggedIn) {
+                AlertDialog.Builder(view.context)
+                    .setTitle("Login Required")
+                    .setMessage("You must be logged in to add to cart")
+                    .setPositiveButton("Login") { _, _ ->
+
+                        val activity = view.context as FragmentActivity
+                        val navController = activity.findNavController(R.id.nav_host_fragment_activity_main)
+                        navController.navigate(R.id.navigation_account)
+
+                        val bottomNav = activity.findViewById<BottomNavigationView>(R.id.nav_view)
+                        bottomNav?.selectedItemId = R.id.navigation_account
+                    }
+                    .setNegativeButton("Not now", null)
+                    .show()
+
+                return@setOnClickListener
+            }
+
             product?.let { p ->
                 repeat(quantity) {
                     CartManager.addItem(p)
