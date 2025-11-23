@@ -6,12 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shoppingg.R
 import com.example.shoppingg.data.CartManager
+import com.example.shoppingg.data.OrderManager
 import com.example.shoppingg.databinding.FragmentCartBinding
+import com.example.shoppingg.ui.orders.Order
+import com.example.shoppingg.ui.orders.OrderItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.text.NumberFormat
 import java.util.Locale
@@ -97,9 +101,29 @@ class CartFragment : Fragment() {
             .setTitle("Thank You For Your Order")
             .setMessage(billDetails)
             .setPositiveButton("OK") { dialog, _ ->
-                // clear cart
+                Toast.makeText(requireContext(), "Checkout successful!", Toast.LENGTH_SHORT).show()
+
+                val items = CartManager.cartItems
+
+                val totalItems = items.sumOf { it.quantity }
+                val totalPrice = items.sumOf { it.product.price * it.quantity }
+
+                val order = Order(
+                    orderId = System.currentTimeMillis().toString(),
+                    total = formatCurrencyVN(totalPrice),
+                    totalItems = totalItems,
+                    items = items.map {
+                        OrderItem(
+                            name = it.product.name,
+                            image = it.product.image,
+                            quantity = it.quantity
+                        )
+                    }
+                )
+
+                OrderManager.addOrder(order)
+
                 CartManager.clear()
-                adapter.updateData(CartManager.cartItems.toMutableList())
                 updateCartSummary()
                 checkEmptyCart()
                 dialog.dismiss()

@@ -16,32 +16,76 @@
         android:id="@+id/navigation_cart"
         android:name="com.example.shoppingg.ui.cart.CartFragment"
         android:label="@string/title_cart"
-        tools:layout="@layout/fragment_cart"/>
+        tools:layout="@layout/fragment_cart">
+        <action
+            android:id="@+id/action_navigation_cart_to_myOrdersFragment"
+            app:destination="@+id/myOrdersFragment"/>
+    </fragment>
 
-    <!-- Account tab (nested graph) -->
+    <!-- Account tab -->
     <navigation
         android:id="@+id/navigation_account"
-        app:startDestination="@id/loginFragment">
+        app:startDestination="@id/accountFragment">
 
+        <!-- Account -->
+        <fragment
+            android:id="@+id/accountFragment"
+            android:name="com.example.shoppingg.ui.account.AccountFragment"
+            android:label="Account"
+            tools:layout="@layout/fragment_account">
+
+            <action
+                android:id="@+id/action_accountFragment_to_myOrdersFragment"
+                app:destination="@id/myOrdersFragment" />
+
+            <action
+                android:id="@+id/action_accountFragment_to_changePassword"
+                app:destination="@+id/changePasswordFragment"/>
+        </fragment>
+
+        <!-- Login -->
         <fragment
             android:id="@+id/loginFragment"
             android:name="com.example.shoppingg.ui.account.LoginFragment"
-            android:label="Account"
+            android:label="Login"
             tools:layout="@layout/fragment_login">
+
             <action
                 android:id="@+id/action_loginFragment_to_signUpFragment"
                 app:destination="@id/signUpFragment"/>
+
+            <action
+                android:id="@+id/action_loginFragment_to_accountFragment"
+                app:destination="@id/accountFragment"
+                app:popUpTo="@id/navigation_account"
+                app:popUpToInclusive="true" />
         </fragment>
 
+        <!-- Sign Up -->
         <fragment
             android:id="@+id/signUpFragment"
             android:name="com.example.shoppingg.ui.account.SignUpFragment"
-            android:label="Account"
+            android:label="Sign Up"
             tools:layout="@layout/fragment_register">
+
             <action
                 android:id="@+id/action_signUpFragment_to_loginFragment"
                 app:destination="@id/loginFragment"/>
         </fragment>
+
+        <!-- Orders -->
+        <fragment
+            android:id="@+id/myOrdersFragment"
+            android:name="com.example.shoppingg.ui.orders.MyOrdersFragment"
+            android:label="My Orders"
+            tools:layout="@layout/fragment_my_orders"/>
+
+        <!-- Change Password-->
+        <fragment
+            android:id="@+id/changePasswordFragment"
+            android:name="com.example.shoppingg.ui.account.ChangePasswordFragment"
+            android:label="Change Password"
+            tools:layout="@layout/fragment_change_password"/>
     </navigation>
 
     <!-- Product Detail -->
