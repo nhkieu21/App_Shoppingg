@@ -27,9 +27,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState == null) {
-            SessionManager(this).clearSession()
-        }
+//        if (savedInstanceState == null) {
+//            SessionManager(this).clearSession()
+//        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home,
                 R.id.navigation_cart,
                 R.id.navigation_account,
-                R.id.signUpFragment
+                R.id.loginFragment
             )
         )
 

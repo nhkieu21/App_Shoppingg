@@ -102,11 +102,11 @@ class ProductDetailFragment : Fragment() {
 
                 Snackbar.make(view, "Added $quantity $itemText to your cart", Snackbar.LENGTH_LONG)
                     .setAction("View Cart") {
-                        findNavController().navigate(R.id.navigation_cart)
-
+                        findNavController().popBackStack(R.id.navigation_home, false)
                         val bottomNav =
-                            requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
-                        bottomNav.selectedItemId = R.id.navigation_cart
+                            (view.context as? androidx.fragment.app.FragmentActivity)
+                                ?.findViewById<BottomNavigationView>(R.id.nav_view)
+                        bottomNav?.selectedItemId = R.id.navigation_cart
                     }.show()
                 quantity = 1
                 tvQuantity.text = quantity.toString()

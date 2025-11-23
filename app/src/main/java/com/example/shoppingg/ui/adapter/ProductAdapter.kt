@@ -86,12 +86,6 @@ class ProductAdapter(
 
                     Snackbar.make(view, "Added $quantity $itemText to your cart", Snackbar.LENGTH_LONG)
                         .setAction("View Cart") {
-                            val navController = (view.context as? androidx.fragment.app.FragmentActivity)
-                                ?.supportFragmentManager
-                                ?.primaryNavigationFragment
-                                ?.findNavController()
-                            navController?.navigate(R.id.navigation_cart)
-
                             val bottomNav =
                                 (view.context as? androidx.fragment.app.FragmentActivity)
                                     ?.findViewById<BottomNavigationView>(R.id.nav_view)
@@ -100,6 +94,7 @@ class ProductAdapter(
                     quantity = 1
                     tvQuantity.text = quantity.toString()
                 }
+
             }
         }
 
