@@ -33,4 +33,25 @@ class SessionManager(context: Context) {
     fun clearSession() {
         prefs.edit().clear().apply()
     }
+
+    fun clearPhoneAddress() {
+        prefs.edit()
+            .remove("user_phone")
+            .remove("user_address")
+            .apply()
+    }
+
+
+    fun saveUserPhone(phone: String) {
+        prefs.edit().putString("user_phone", phone).apply()
+    }
+
+    fun getUserPhone(): String? = prefs.getString("user_phone", null)
+
+    fun saveUserAddress(address: String) {
+        prefs.edit().putString("user_address", address).apply()
+    }
+
+    fun getUserAddress(): String? = prefs.getString("user_address", null)
+
 }

@@ -20,6 +20,10 @@
         <action
             android:id="@+id/action_navigation_cart_to_myOrdersFragment"
             app:destination="@+id/myOrdersFragment"/>
+        <action
+            android:id="@+id/action_cartFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment">
+        </action>
     </fragment>
 
     <!-- Account tab -->
@@ -87,6 +91,14 @@
             android:label="Change Password"
             tools:layout="@layout/fragment_change_password"/>
     </navigation>
+
+
+    <!-- Checkout-->
+    <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.example.shoppingg.ui.checkout.CheckoutFragment"
+        android:label="Checkout"
+        tools:layout="@layout/fragment_checkout"/>
 
     <!-- Product Detail -->
     <fragment

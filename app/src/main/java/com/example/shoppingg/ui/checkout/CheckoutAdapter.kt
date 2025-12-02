@@ -1,4 +1,4 @@
-package com.example.shoppingg.ui.orders
+package com.example.shoppingg.ui.checkout
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,59 +10,60 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.shoppingg.R
 
-data class OrderItem(
+data class tempOrderItem(
     val name: String,
     val image: String,
     val quantity: Int
 )
-data class Order(
+
+data class tempOrder(
     val orderId: String,
     val total: String,
     val totalItems: Int,
     val address: String,
     val phone: String,
-    val items: List<OrderItem>
+    val items: List<tempOrderItem>
 )
 
-class MyOrdersAdapter(private val orders: List<Order>) :
-    RecyclerView.Adapter<MyOrdersAdapter.OrderViewHolder>() {
+class CheckoutAdapter(private val orders: List<tempOrder>) :
+    RecyclerView.Adapter<CheckoutAdapter.OrderViewHolder>() {
 
     class OrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvOrderId: TextView = itemView.findViewById(R.id.tvOrderId)
-        val tvOrderTotal: TextView = itemView.findViewById(R.id.tvOrderTotal)
-        val tvOrderDetails: LinearLayout = itemView.findViewById(R.id.tvListOrder)
+        val tvListOrder: LinearLayout = itemView.findViewById(R.id.tvListOrder)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_order, parent, false)
+            .inflate(R.layout.fragment_order_in_checkout, parent, false)
         return OrderViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
         val order = orders[position]
+
         holder.tvOrderId.text = "Order ID: #${order.orderId}"
-        holder.tvOrderTotal.text = "Total (${order.totalItems} items): ${order.total}đ"
 
-        val tvListOrder = holder.tvOrderDetails
-        tvListOrder.removeAllViews()
+        val container = holder.tvListOrder
+        container.removeAllViews()
 
+        // Thêm từng item con
         for (item in order.items) {
             val itemView = LayoutInflater.from(holder.itemView.context)
-                .inflate(R.layout.item_order_detail, tvListOrder, false)
+                .inflate(R.layout.item_order_detail, container, false)
 
-            val imageView = itemView.findViewById<ImageView>(R.id.tvOderImage)
-            val tvDetails = itemView.findViewById<TextView>(R.id.tvOrderDetails)
+            val img = itemView.findViewById<ImageView>(R.id.tvOderImage)
+            val tv = itemView.findViewById<TextView>(R.id.tvOrderDetails)
 
             Glide.with(holder.itemView.context)
                 .load(item.image)
                 .placeholder(R.drawable.ic_launcher_foreground)
-                .into(imageView)
+                .into(img)
 
-            tvDetails.text = "${item.name} x${item.quantity}"
-            tvListOrder.addView(itemView)
+            tv.text = "${item.name} x${item.quantity}"
+
+            container.addView(itemView)
         }
-
     }
 
     override fun getItemCount(): Int = orders.size
