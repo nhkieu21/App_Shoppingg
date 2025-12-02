@@ -27,9 +27,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        if (savedInstanceState == null) {
-//            SessionManager(this).clearSession()
-//        }
+        if (savedInstanceState == null) {
+            SessionManager(this).clearPhoneAddress()
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
