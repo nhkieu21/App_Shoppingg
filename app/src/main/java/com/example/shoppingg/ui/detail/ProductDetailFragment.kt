@@ -1,11 +1,13 @@
 package com.example.shoppingg.ui.detail
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -19,6 +21,9 @@ import com.example.shoppingg.data.SessionManager
 import com.example.shoppingg.ui.models.Product
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import android.widget.LinearLayout
+import android.widget.Toast
+
 
 class ProductDetailFragment : Fragment() {
 
@@ -44,6 +49,7 @@ class ProductDetailFragment : Fragment() {
         val btnMinus = view.findViewById<Button>(R.id.btn_minus)
         val btnPlus = view.findViewById<Button>(R.id.btn_plus)
         val tvQuantity = view.findViewById<TextView>(R.id.tv_quantity)
+        val btnShare = view.findViewById<ImageView>(R.id.btn_share)
 
         product?.let { p ->
             name.text = p.name
@@ -104,7 +110,7 @@ class ProductDetailFragment : Fragment() {
                     .setAction("View Cart") {
                         findNavController().popBackStack(R.id.navigation_home, false)
                         val bottomNav =
-                            (view.context as? androidx.fragment.app.FragmentActivity)
+                            (view.context as? FragmentActivity)
                                 ?.findViewById<BottomNavigationView>(R.id.nav_view)
                         bottomNav?.selectedItemId = R.id.navigation_cart
                     }.show()
@@ -113,7 +119,37 @@ class ProductDetailFragment : Fragment() {
             }
         }
 
+        btnShare.setOnClickListener {
+            val popupView = layoutInflater.inflate(R.layout.popup_share, null)
+
+            val btnCopyLink = popupView.findViewById<LinearLayout>(R.id.btn_copy_link)
+            val btnFacebook = popupView.findViewById<LinearLayout>(R.id.btn_share_fb)
+            val btnMessenger = popupView.findViewById<LinearLayout>(R.id.btn_share_messenger)
+
+            val dialog = AlertDialog.Builder(requireContext())
+                .setView(popupView)
+                .create()
+
+            dialog.show()
+
+            btnCopyLink.setOnClickListener {
+                Toast.makeText(requireContext(), "Link copied to clipboard", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+
+            btnFacebook.setOnClickListener {
+                Toast.makeText(requireContext(), "Shared on Facebook", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+
+            btnMessenger.setOnClickListener {
+                Toast.makeText(requireContext(), "Shared on Messenger", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+        }
+
 
         return view
     }
+
 }
