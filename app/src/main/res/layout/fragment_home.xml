@@ -12,6 +12,10 @@
         android:layout_height="wrap_content"
         android:paddingBottom="16dp">
 
+        <include
+            android:id="@+id/layoutSearch"
+            layout="@layout/view_search"/>
+
         <!-- Carousel -->
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/carouselViewPager"
@@ -75,6 +79,8 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/bg_button"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:visibility="gone"/>
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
