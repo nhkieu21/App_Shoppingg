@@ -117,4 +117,10 @@
         android:name="com.example.shoppingg.ui.category.CategoryFragment"
         android:label="CategoryFragment"
         tools:layout="@layout/fragment_category"/>
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.shoppingg.ui.search.SearchFragment"
+        android:label="Search" />
+
 </navigation>

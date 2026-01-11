@@ -20,6 +20,8 @@ import com.example.shoppingg.ui.adapter.ProductAdapter
 import com.example.shoppingg.ui.models.Product
 import android.os.Handler
 import android.os.Looper
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.navigation.NavOptions
 
 
 class HomeFragment : Fragment() {
@@ -119,9 +121,38 @@ class HomeFragment : Fragment() {
 
         viewModel.loadProducts(requireContext(), currentCategory)
 
+        val searchView = binding.layoutSearch.searchView
+
+        searchView.setOnQueryTextListener(object : OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!query.isNullOrBlank()) {
+                    val bundle = Bundle().apply {
+                        putString("query", query)
+                        putSerializable("products", ArrayList(allProducts))
+                    }
+
+                    searchView.setQuery("", false)
+                    searchView.clearFocus()
+
+                    findNavController().navigate(
+                        R.id.searchFragment,
+                        bundle,
+                        NavOptions.Builder()
+                            .setLaunchSingleTop(true)
+                            .setPopUpTo(R.id.navigation_home, false)
+                            .build()
+                    )
+
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean = false
+        })
+
         return binding.root
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
