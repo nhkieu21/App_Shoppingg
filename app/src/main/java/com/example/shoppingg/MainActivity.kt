@@ -12,6 +12,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.example.shoppingg.data.OrderManager
 import com.example.shoppingg.data.SessionManager
 import com.example.shoppingg.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
