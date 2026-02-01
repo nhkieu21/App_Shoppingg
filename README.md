@@ -3,31 +3,40 @@
 ## 📘 Introduction
 
 **Shoppingg** is an application that provides users with a wide range of 
-**electronic products** such as **mobile phones, laptops, PCs, watches** and **accessories**.  
+**electronic products** such as **mobile phones, laptops, PCs, watches** and **accessories**. The app allows users to search and purchase products easily with a simple interface.
 
 ## 🚀 Features
+- **Authentication:** Sign Up, Log In and Profile Management.
+- **Product Discovery:**  Display all products and search items by name
+- **Shopping Flow:**  Product list -> Product Details -> Cart Management -> Checkout
+- **Order Management:**  Track and view order history.
 
-- Display all products  
-- Product categorization 
-- Show product information (description, price, etc.)  
-- Add to cart and manage selected products  
-- Checkout functionality  
+## 🧠 Architecture & Tools
+- **Language:** Kotlin
+- **Architecture:** MVVM (Model-View-ViewModel)
+- **UI Framework:** Android Jetpack (ViewModel, Navigation Component)
+- **Database:** Room Database (SQLite)
+- **UI Components:** RecyclerView, ViewPager2, Material Design, XML Layouts
 
 ## 💻 Screenshots
 
-### 🏷️ Product List
-<img src="image/product_list.png" alt="Product List" width="400"/>
+### 🔐 Authentication & Account
+| 📝 Sign Up | 🔑 Log In | 👤 Profile Management |
+| :---: | :---: | :---: |
+| <img src="image/signup.png" width="250"/> | <img src="image/login.png" width="250"/> | <img src="image/account.png" width="250"/> |
 
-### 📚 Product Categories
-<img src="image/product_catalog.png" alt="Product Categories" width="400"/>
+### 🛍️ Shopping Flow
+| 🏠 Home | 📚 Categories | 🔍 Search |
+| :---: | :---: | :---: |
+| <img src="image/home.png" width="250"/> | <img src="image/product_catalog.png" width="250"/> | <img src="image/search_product.png" width="250"/> |
 
-### 📖 Product Details
-<img src="image/product_detail.png" alt="Product Details" width="400"/>
+<br>
 
-### 🛍️ Shopping Cart
-<img src="image/cart.png" alt="Shopping Cart" width="400"/>
+| 📖 Details | 🛒 Cart | 💸 Checkout |
+| :---: | :---: | :---: |
+| <img src="image/product_detail.png" width="250"/> | <img src="image/cart.png" width="250"/> | <img src="image/checkout.png" width="250"/> |
 
-### 💸 Checkout
-<img src="image/checkout.png" alt="Checkout" width="400"/>
-
-
+### 📦 Order History
+| 📦 Order List |
+| :---: |
+| <img src="image/order.png" width="250"/> |
