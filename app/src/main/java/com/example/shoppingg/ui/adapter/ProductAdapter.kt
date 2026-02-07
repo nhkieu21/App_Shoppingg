@@ -1,0 +1,134 @@
+package com.example.shoppingg.ui.adapter
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.shoppingg.R
+import com.example.shoppingg.data.CartManager
+import com.example.shoppingg.data.SessionManager
+import com.example.shoppingg.ui.models.Product
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
+import android.app.AlertDialog
+import androidx.navigation.findNavController
+
+class ProductAdapter(
+    private var products: List<Product>,
+    private val onClick: (Product) -> Unit,
+    private val isSuggestion: Boolean = false
+) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+
+    inner class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val productName: TextView = view.findViewById(R.id.product_name)
+        private val productPrice: TextView = view.findViewById(R.id.product_price)
+        private val productImage: ImageView = view.findViewById(R.id.product_image)
+
+        private val btnAddToCart = view.findViewById<Button>(R.id.btn_add_to_cart)
+        private val btnMinus = view.findViewById<Button>(R.id.btn_minus)
+        private val btnPlus = view.findViewById<Button>(R.id.btn_plus)
+        private val tvQuantity = view.findViewById<TextView>(R.id.tv_quantity)
+
+        private var quantity = 1
+        private var currentProduct: Product? = null
+
+        init {
+            view.setOnClickListener {
+                currentProduct?.let(onClick)
+            }
+
+            btnMinus.setOnClickListener {
+                if (quantity > 1) {
+                    quantity--
+                    tvQuantity.text = quantity.toString()
+                }
+            }
+
+            btnPlus.setOnClickListener {
+                quantity++
+                tvQuantity.text = quantity.toString()
+            }
+
+            btnAddToCart.setOnClickListener { view ->
+                val sessionManager = SessionManager(view.context)
+                val isLoggedIn = sessionManager.isLoggedIn()
+
+                if (!isLoggedIn) {
+                    AlertDialog.Builder(view.context)
+                        .setTitle("Login Required")
+                        .setMessage("You must be logged in to add to cart")
+                        .setPositiveButton("Login") { _, _ ->
+
+                            val activity = view.context as FragmentActivity
+                            val navController = activity.findNavController(R.id.nav_host_fragment_activity_main)
+                            navController.navigate(R.id.navigation_account)
+
+                            val bottomNav = activity.findViewById<BottomNavigationView>(R.id.nav_view)
+                            bottomNav?.selectedItemId = R.id.navigation_account
+                        }
+                        .setNegativeButton("Not now", null)
+                        .show()
+
+                    return@setOnClickListener
+                }
+
+                currentProduct?.let { product ->
+                    repeat(quantity) {
+                        CartManager.addItem(product)
+                    }
+                    val itemText = if (quantity == 1) "item" else "items"
+
+                    Snackbar.make(view, "Added $quantity $itemText to your cart", Snackbar.LENGTH_LONG)
+                        .setAction("View Cart") {
+                            val bottomNav =
+                                (view.context as? androidx.fragment.app.FragmentActivity)
+                                    ?.findViewById<BottomNavigationView>(R.id.nav_view)
+                            bottomNav?.selectedItemId = R.id.navigation_cart
+                        }.show()
+                    quantity = 1
+                    tvQuantity.text = quantity.toString()
+                }
+
+            }
+        }
+
+        fun bind(product: Product) {
+            currentProduct = product
+            productName.text = product.name
+            productPrice.text = product.priceFormatted
+
+            Glide.with(itemView)
+                .load(product.image)
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .error(R.drawable.ic_launcher_foreground)
+                .into(productImage)
+
+            quantity = 1
+            tvQuantity.text = quantity.toString()
+        }
+
+    }
+
+    fun updateData(newList: List<Product>) {
+        products = newList
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
+        val layoutId = if (isSuggestion) R.layout.item_suggestion else R.layout.item_product
+        val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
+        return ProductViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+        holder.bind(products[position])
+    }
+
+    override fun getItemCount(): Int = products.size
+}

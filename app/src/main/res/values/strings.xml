@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Shoppingg</string>
+    <string name="title_home">Home</string>
+    <string name="title_cart">Cart</string>
+    <string name="title_account">Account</string>
+    <string-array name="dropdown">
+        <item>All</item>
+        <item>Phone</item>
+        <item>Laptop</item>
+        <item>Clock</item>
+        <item>PC</item>
+        <item>Electronic</item>
+    </string-array>
+</resources>

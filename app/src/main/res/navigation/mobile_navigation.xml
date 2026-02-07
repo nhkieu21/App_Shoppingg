@@ -1,0 +1,137 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_home">
+
+    <!-- Home tab -->
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.shoppingg.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home"
+        app:launchSingleTop="true"
+        app:restoreState="true"
+        app:popUpToSaveState="true"/>
+
+    <!-- Cart tab -->
+    <fragment
+        android:id="@+id/navigation_cart"
+        android:name="com.example.shoppingg.ui.cart.CartFragment"
+        android:label="@string/title_cart"
+        tools:layout="@layout/fragment_cart">
+        <action
+            android:id="@+id/action_navigation_cart_to_myOrdersFragment"
+            app:destination="@+id/myOrdersFragment"/>
+        <action
+            android:id="@+id/action_cartFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment">
+        </action>
+    </fragment>
+
+    <!-- Account tab -->
+    <navigation
+        android:id="@+id/navigation_account"
+        app:startDestination="@id/accountFragment">
+
+        <!-- Account -->
+        <fragment
+            android:id="@+id/accountFragment"
+            android:name="com.example.shoppingg.ui.account.AccountFragment"
+            android:label="Account"
+            tools:layout="@layout/fragment_account">
+
+            <action
+                android:id="@+id/action_accountFragment_to_myOrdersFragment"
+                app:destination="@id/myOrdersFragment" />
+
+            <action
+                android:id="@+id/action_accountFragment_to_changePassword"
+                app:destination="@+id/changePasswordFragment"/>
+        </fragment>
+
+        <!-- Login -->
+        <fragment
+            android:id="@+id/loginFragment"
+            android:name="com.example.shoppingg.ui.account.LoginFragment"
+            android:label="Login"
+            tools:layout="@layout/fragment_login">
+
+            <action
+                android:id="@+id/action_loginFragment_to_signUpFragment"
+                app:destination="@id/signUpFragment"/>
+
+            <action
+                android:id="@+id/action_loginFragment_to_accountFragment"
+                app:destination="@id/accountFragment"
+                app:popUpTo="@id/navigation_account"
+                app:popUpToInclusive="true" />
+        </fragment>
+
+        <!-- Sign Up -->
+        <fragment
+            android:id="@+id/signUpFragment"
+            android:name="com.example.shoppingg.ui.account.SignUpFragment"
+            android:label="Sign Up"
+            tools:layout="@layout/fragment_register">
+
+            <action
+                android:id="@+id/action_signUpFragment_to_loginFragment"
+                app:destination="@id/loginFragment"/>
+        </fragment>
+
+        <!-- Orders -->
+        <fragment
+            android:id="@+id/myOrdersFragment"
+            android:name="com.example.shoppingg.ui.orders.MyOrdersFragment"
+            android:label="My Orders"
+            tools:layout="@layout/fragment_my_orders"/>
+
+        <!-- Change Password-->
+        <fragment
+            android:id="@+id/changePasswordFragment"
+            android:name="com.example.shoppingg.ui.account.ChangePasswordFragment"
+            android:label="Change Password"
+            tools:layout="@layout/fragment_change_password"/>
+    </navigation>
+
+
+    <!-- Checkout-->
+    <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.example.shoppingg.ui.checkout.CheckoutFragment"
+        android:label="Checkout"
+        tools:layout="@layout/fragment_checkout"/>
+
+    <!-- Product Detail -->
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.example.shoppingg.ui.detail.ProductDetailFragment"
+        android:label="Product Detail"
+        tools:layout="@layout/fragment_product_detail">
+        <argument
+            android:name="product"
+            app:argType="com.example.shoppingg.ui.models.Product"/>
+    </fragment>
+
+    <!-- Category -->
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.example.shoppingg.ui.category.CategoryFragment"
+        android:label="CategoryFragment"
+        tools:layout="@layout/fragment_category"
+        app:launchSingleTop="true"
+        app:restoreState="true"
+        app:popUpToSaveState="true"/>
+
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.shoppingg.ui.search.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search"
+        app:launchSingleTop="true"
+        app:restoreState="true"
+        app:popUpToSaveState="true"/>
+
+</navigation>
