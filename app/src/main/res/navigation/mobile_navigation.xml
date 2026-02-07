@@ -9,7 +9,10 @@
         android:id="@+id/navigation_home"
         android:name="com.example.shoppingg.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home"/>
+        tools:layout="@layout/fragment_home"
+        app:launchSingleTop="true"
+        app:restoreState="true"
+        app:popUpToSaveState="true"/>
 
     <!-- Cart tab -->
     <fragment
@@ -116,11 +119,19 @@
         android:id="@+id/categoryFragment"
         android:name="com.example.shoppingg.ui.category.CategoryFragment"
         android:label="CategoryFragment"
-        tools:layout="@layout/fragment_category"/>
+        tools:layout="@layout/fragment_category"
+        app:launchSingleTop="true"
+        app:restoreState="true"
+        app:popUpToSaveState="true"/>
+
 
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.shoppingg.ui.search.SearchFragment"
-        android:label="Search" />
+        android:label="Search"
+        tools:layout="@layout/fragment_search"
+        app:launchSingleTop="true"
+        app:restoreState="true"
+        app:popUpToSaveState="true"/>
 
 </navigation>

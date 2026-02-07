@@ -197,11 +197,12 @@ class SignUpFragment : Fragment() {
         val isConfirmValid = validateConfirmPassword()
 
         if (isFullNameValid && isEmailValid && isPasswordValid && isConfirmValid) {
+            val fullName = binding.etFullName.text.toString().trim()
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
 
             val sessionManager = SessionManager(requireContext())
-            sessionManager.saveUser(email, password)
+            sessionManager.saveUser(email, password, fullName)
             sessionManager.saveLoginState(false)
 
             Toast.makeText(requireContext(), "Registration successful!", Toast.LENGTH_SHORT).show()

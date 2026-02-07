@@ -23,6 +23,7 @@ class MyOrdersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMyOrdersBinding.inflate(inflater, container, false)
+        OrderManager.init(requireContext())
         return binding.root
     }
 

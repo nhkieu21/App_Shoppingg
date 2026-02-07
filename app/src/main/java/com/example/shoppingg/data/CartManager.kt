@@ -1,15 +1,20 @@
 package com.example.shoppingg.data
 
-import android.os.Looper
+import com.example.shoppingg.network.RetrofitClient
 import com.example.shoppingg.ui.models.CartItem
 import com.example.shoppingg.ui.models.Product
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 object CartManager {
     private val _cartItems = mutableListOf<CartItem>()
 
     val cartItems: List<CartItem>
         get() = _cartItems
-
+    fun setCart(items: List<CartItem>) {
+        _cartItems.clear()
+        _cartItems.addAll(items)
+    }
     fun addItem(product: Product, quantity: Int = 1) {
         val existing = _cartItems.find { it.product.name == product.name }
         if (existing != null) {
@@ -46,4 +51,20 @@ object CartManager {
             if (quantity <= 0) _cartItems.remove(item)
         }
     }
+
+//    suspend fun syncCartWithServer(token: String): Boolean {
+//        return withContext(Dispatchers.IO) {
+//            try {
+//                val response = RetrofitClient.apiService.getCart("Bearer $token")
+//                if (response.isSuccessful && response.body() != null) {
+//                    setCart(response.body()!!)
+//                    true
+//                } else {
+//                    false
+//                }
+//            } catch (e: Exception) {
+//                false
+//            }
+//        }
+//    }
 }

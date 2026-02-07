@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,15 +15,13 @@ import com.example.shoppingg.ui.adapter.Category
 import com.example.shoppingg.ui.adapter.CategoryAdapter
 import com.example.shoppingg.ui.adapter.ProductAdapter
 import com.example.shoppingg.ui.home.HomeViewModel
-import com.example.shoppingg.ui.models.Product
-import kotlin.math.ceil
 
 class CategoryFragment : Fragment() {
 
     private var _binding: FragmentCategoryBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
     private lateinit var adapter: ProductAdapter
     private lateinit var categoryAdapter: CategoryAdapter
 
@@ -37,9 +35,7 @@ class CategoryFragment : Fragment() {
         _binding = FragmentCategoryBinding.inflate(inflater, container, false)
         currentCategory = viewModel.savedCategory
 
-        if (viewModel.products.value.isNullOrEmpty()) {
-            viewModel.loadProducts(requireContext(), currentCategory)
-        }
+        viewModel.loadProducts(requireContext(), currentCategory)
 
         setupRecyclerViews()
         setupPaginationButtons()

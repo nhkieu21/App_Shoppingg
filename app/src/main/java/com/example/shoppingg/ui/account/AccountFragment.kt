@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -11,8 +12,10 @@ import com.example.shoppingg.R
 import com.example.shoppingg.data.SessionManager
 
 class AccountFragment : Fragment() {
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.fragment_account, container, false)
@@ -25,7 +28,18 @@ class AccountFragment : Fragment() {
 
         if (!sessionManager.isLoggedIn()) {
             findNavController().navigate(R.id.loginFragment)
+            return
         }
+
+        val tvFullName = view.findViewById<TextView>(R.id.tvFullName)
+        val tvEmail = view.findViewById<TextView>(R.id.tvEmail)
+
+        val fullName = sessionManager.getFullName()
+        val email = sessionManager.getUserEmail()
+
+        tvFullName.text = if (!fullName.isNullOrEmpty()) fullName else "User"
+        tvEmail.text = email ?: ""
+
 
         view.findViewById<View>(R.id.btnMyOrders).setOnClickListener {
             findNavController().navigate(R.id.action_accountFragment_to_myOrdersFragment)
@@ -39,9 +53,6 @@ class AccountFragment : Fragment() {
             sessionManager.saveLoginState(false)
             Toast.makeText(requireContext(), "Logout successful!", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.loginFragment)
-
         }
     }
 }
-
-
