@@ -172,6 +172,7 @@ class ChangePasswordFragment : Fragment() {
         val session = SessionManager(requireContext())
         val email = session.getUserEmail() ?: ""
         val password = session.getUserPassword() ?:""
+        val fullName = session.getFullName() ?: ""
         val currentPassword = binding.etPassword.text.toString().trim()
         val newPass = binding.etNewPassword.text.toString().trim()
 
@@ -185,7 +186,7 @@ class ChangePasswordFragment : Fragment() {
             return
         }
 
-        session.saveUser(email, newPass)
+        session.saveUser(email, newPass, fullName)
 
         Toast.makeText(requireContext(), "Password updated successfully", Toast.LENGTH_SHORT).show()
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:id="@+id/group_home">
+        <item
+            android:id="@+id/menu_home"
+            android:title="🏠 Home" />
+    </group>
+
+    <group android:id="@+id/group_search">
+        <item
+            android:id="@+id/menu_search"
+            android:title="🔍 Search" />
+    </group>
+
+    <item android:title="📂 Categories">
+        <menu>
+            <item
+                android:id="@+id/cat_all"
+                android:title="All" />
+            <item
+                android:id="@+id/cat_phone"
+                android:title="Phone" />
+            <item
+                android:id="@+id/cat_laptop"
+                android:title="Laptop" />
+            <item
+                android:id="@+id/cat_clock"
+                android:title="Clock" />
+            <item
+                android:id="@+id/cat_pc"
+                android:title="PC" />
+            <item
+                android:id="@+id/cat_electronic"
+                android:title="Electronic" />
+        </menu>
+    </item>
+
+    <group android:id="@+id/group_orders">
+        <item
+            android:id="@+id/menu_orders"
+            android:title="📦 My Orders" />
+    </group>
+
+    <group android:id="@+id/group_logout">
+        <item
+            android:id="@+id/menu_logout"
+            android:title="🚪 Logout" />
+    </group>
+
+</menu>

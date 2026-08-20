@@ -173,12 +173,14 @@ class CheckoutFragment : Fragment() {
                         it.quantity)
                 }
             )
-            OrderManager.addOrder(finalOrder)
+            OrderManager.addOrder(requireContext(), finalOrder)
+
         }
 
 
         // 5. Kết thúc giao dịch
         CartManager.clear()
+        SessionManager(requireContext()).clearCart()
         OrderManager.clearTempOrder()
 
         Toast.makeText(requireContext(), "Checkout successful!", Toast.LENGTH_SHORT).show()

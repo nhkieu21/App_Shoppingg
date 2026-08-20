@@ -33,17 +33,21 @@ class CartFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var adapter: CartAdapter
+    private lateinit var session: SessionManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCartBinding.inflate(inflater, container, false)
+        session = SessionManager(requireContext())
 
+        CartManager.setCart(session.getCart())
         // Setup RecyclerView
         adapter = CartAdapter(
             CartManager.cartItems.toMutableList()
         ) {
+            session.saveCart(CartManager.cartItems)
             // Callback
             updateCartSummary()
             checkEmptyCart()
@@ -250,6 +254,10 @@ class CartFragment : Fragment() {
 //            .show()
 //    }
 
+    override fun onPause() {
+        super.onPause()
+        session.saveCart(CartManager.cartItems)
+    }
 
 
     override fun onResume() {
